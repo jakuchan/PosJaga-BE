@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PengawasController;
+use App\Http\Controllers\PeraturanController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Session\SessionServiceProvider;
@@ -26,7 +28,9 @@ Route::post('/login', [SessionController::class, 'login']) -> middleware('isGuar
 Route::get('/logout', [SessionController::class, 'logout']);
 Route::get('/dashboard', [DashboardController::class, 'index']) -> middleware('isLogin');
 
-Route::resource('/student', StudentController::class);
+Route::resource('/pengawas', PengawasController::class);
+Route::resource('/peraturan', PeraturanController::class);
+Route::resource('/siswa', StudentController::class);
 // Route::controller(StudentController::class)->group(function() {
 //     // Views
 //     Route::get('/student', 'index');

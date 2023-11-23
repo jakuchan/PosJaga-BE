@@ -1,17 +1,17 @@
 @extends('layout/index')
-@section('title', 'Add Student')
+@section('title', 'Edit Siswa')
 
 @section('content')
 
 @if($errors -> any())
     <ul>
         @foreach ($errors->all() as $item)
-            <li> {{ $item }} </li>
+        <li> {{ $item }} </li>
         @endforeach
     </ul>
 @endif
 <br><br><br>
-<form action=" {{ url('student/'.$data->NIS) }}" method="post">
+<form action="{{ route('siswa.update', $data->NIS) }}" method="post">
     @csrf
     @method('PUT')
     <table>
@@ -37,7 +37,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><button type="submit" name="save">Save</button></td>
+            <td><button type="submit" name="submit">Save</button></td>
         </tr>
     </table>
 </form>

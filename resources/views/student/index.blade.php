@@ -1,7 +1,8 @@
 @extends('layout/index')
-@section('title', 'Student')
+@section('title', 'Siswa')
 
 @section('content')
+{{-- @dd('student') --}}
 
 <br>
 <table>
@@ -26,9 +27,9 @@
             <td>{{ $item->Kelas }}</td>
             <td>{{ $item->Jurusan }}</td>
             <td>{{ $item->TA }}</td>
-            <td><a href="/student/{{ $item->NIS }}/edit">Edit</a></td>
+            <td><a href="{{ route('siswa.edit', $item->NIS) }}">Edit</a></td>
             <td>
-                <form action="{{ URL('student/'.$item->NIS) }}" method="post">
+                <form action="{{ route('siswa.destroy', $item->NIS) }}" method="post">
                     @csrf
                     @method('DELETE')
                     <button type="submit" name="delete">Delete</button>

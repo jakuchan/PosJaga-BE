@@ -1,5 +1,5 @@
 @extends('layout/index')
-@section('title', 'Add Student')
+@section('title', 'Tambah Pengawas')
 
 @section('content')
 
@@ -11,13 +11,11 @@
     </ul>  
 @endif
 <br><br><br>
-<form action=" {{ url('student') }}" method="post">
+<form action=" {{ url('pengawas') }}" method="post">
     @csrf
-    <input type="text" placeholder="NIS" name="nis">
+    <input type="text" placeholder="NIP" name="nip">
     <input type="text" placeholder="Nama" name="nama">
-    <input type="text" placeholder="Kelas" name="kelas">
-    <input type="text" placeholder="Jurusan" name="jurusan">
-    <input type="text" placeholder="TA" name="ta">
+    <input type="text" placeholder="Status" name="status">
     <button type="submit" name="save">Save</button>
 </form>
 @endsection

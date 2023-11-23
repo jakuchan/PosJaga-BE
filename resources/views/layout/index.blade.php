@@ -16,13 +16,15 @@
 
     {{-- Animate.css --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Montserrat+Alternates&display=swap" rel="stylesheet">
-    
+
+    {{-- JQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     <!-- Tailwind Elements styles -->
     <link
       rel="stylesheet"
@@ -51,7 +53,7 @@
       const notifTime = 2000;
     </script>
 
-    <title>SKAPEL | @yield('title')</title>
+    <title>@yield('title') - SKAPEL</title>
 </head>
 <body>
     @if(Auth::user())
@@ -67,6 +69,8 @@
         
     </footer>
     @endif
+  
+    {{-- Tailwind --}}
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
 </body>
 </html>

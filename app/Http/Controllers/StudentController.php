@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -18,7 +19,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $student = Student::orderBy('NIS', 'ASC')->paginate(10);
+        $student = Student::orderBy('NIS', 'ASC')->paginate(20);
         return view('student/index', compact('student'));
     }
 
@@ -27,7 +28,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('student/create');
+        return view('student/add');
     }
 
     /**
@@ -37,10 +38,16 @@ class StudentController extends Controller
     {
         $request -> validate(
         [
-            'nis' => 'required|numeric|unique:students,nis|min:9',
-            'nama' => 'required|unique:students,nama',
-            'kelas' => 'required',
-            'jurusan' => 'required',
+            'nis' => 'required|numeric|digits:9|unique:students,nis',
+            'nama' => 'required|max:40|unique:students,nama',
+            'kelas' => [
+                'required',
+                Rule::in(Student::pluck('Kelas')->toArray()),
+            ],
+            'jurusan' => [
+                'required',
+                Rule::in(Student::pluck('Jurusan')->toArray()),
+            ],
             'ta' => 'required',
         ]);
         $data = [
@@ -52,7 +59,7 @@ class StudentController extends Controller
         ];
 
         Student::create($data);
-        return redirect('/student')->with('success', 'Data added');
+        return redirect('/siswa')->with('success', 'Data added');
     }
 
     /**
@@ -66,41 +73,57 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit($id)
     {
-        $data = Student::where('NIS', $student->NIS)->first();
-        return view('student/edit')->with('data', $data);
+        $student = Student::where('NIS', $id)->first();
+        if(!$student)
+            return redirect('/siswa')->with('failed', "Data doesn't exist!");
+        return view('student/edit')->with('data', $student);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, $id)
     {
-        $request -> validate(
-        [
-            'nama' => 'required|unique:students,nama',
-            'kelas' => 'required',
-            'jurusan' => 'required',
-            'ta' => 'required',
-        ]);
-        $data = [
-            'Nama' => $request->nama,
-            'Kelas' => $request->kelas,
-            'Jurusan' => $request->jurusan,
-            'TA' => $request->ta,
-        ];
-
-        Student::where('NIS', $student->NIS)->update($data);
-        return redirect('/student')->with('success', 'Data edited');
+        $student = Student::where('NIS', $id)->first();
+        if($student) {
+            $request->validate([
+                'nama' => 'required|max:40|unique:students,nama,' . $student->NIS . ',NIS',
+                'kelas' => [
+                    'required',
+                    Rule::in(Student::pluck('Kelas')->toArray()),
+                ],
+                'jurusan' => [
+                    'required',
+                    Rule::in(Student::pluck('Jurusan')->toArray()),
+                ],
+                'ta' => 'required',
+            ]);
+    
+            $data = [
+                'Nama' => $request->nama,
+                'Kelas' => $request->kelas,
+                'Jurusan' => $request->jurusan,
+                'TA' => $request->ta,
+            ];
+    
+            $student->update($data);
+            return redirect('/siswa')->with('success', 'Data edited');
+        }
+        return redirect('/siswa')->with('failed', `Data doesn't exist!`);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
-        Student::where('NIS', $student->NIS)->delete($student->NIS);
-        return redirect('/student')->with('success', 'Data deleted');
+        $student = Student::where('NIS', $id)->first();
+        if($student) {
+            $student->delete($student->NIS);
+            return redirect('/siswa')->with('success', 'Data deleted');
+        }
+        return redirect('/siswa')->with('failed', `Data doesn't`);
     }
 }
